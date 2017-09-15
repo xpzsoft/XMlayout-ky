@@ -1,0 +1,27 @@
+<link href="../../plugs/prism/prism.css" rel="stylesheet">
+<div style="width:100%; height:100%;">
+	<div style="width:100%; height:100%; background-color: red;">
+		<span style="font-size: 40px; color: white;">Panel 1</span>
+		<br/><br/>
+		<div style="margin-left: 5%;">
+			<span style="font-size: 20px; color: white;">In panel 1, two features has been set using xmlayout.js as follow : </span>
+		</div>
+		<div style=" width: 90%; margin-left: 5%;">
+<br/>
+<span style="color: white;">1, ZOOM_OUT is disabled by setting.</span>
+<pre class="line-numbers"><code class="language-javascript">
+	xm.disablePanelItem(panels[0], xm.RPID.ZOOM_OUT, true);
+</code></pre>
+
+<br/><br/>
+<span style="color: white;">2, A self-defined right panel button 'user-defiend' is added into right panel.</span>
+<pre class="line-numbers"><code class="language-javascript">
+	var id = xm.addRightPanelItem(panels[0], "user-defiend", function(e){
+        alert("user-defiend click");
+        xm.removeRightPanelItem(panels[0], id);//remove the self-defined right panel button
+    });
+</code></pre>
+		</div>
+	</div>
+</div>
+<script src="../../plugs/prism/prism.js"></script>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+	<link type="image/x-icon" rel="shortcut icon" href="img/sign.ico" />
+  	<title>XMlayout.js</title>
+    <link href="../../../plugs/jquery/jquery-ui.css" rel="stylesheet">
+    <link href="../../../plugs/prism/prism.css" rel="stylesheet">
+    <script src="../../../plugs/jquery/jquery.js"></script>
+    <script src="../../../plugs/jquery/jquery-ui.js"></script>
+    <script src="../../../plugs/jquery-xmlayout/xmlayout.min.js"></script>
+  </head>
+  <body oncontextmenu="window.event.returnValue = false; return false;">
+    <div style="height: 100px;">
+      <a href="../workspace.html">Return</a>
+    </div>
+  	<div id="main" style="width: 2000px; height: 1000px;"></div>
+    <div style="width: 2000px;">
+    <br/>
+      实现代码：
+<pre class="line-numbers language-markup">
+<code>
+    &lt;link rel="stylesheet" href="http://apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css"&gt;
+    &lt;script src="http://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"&gt;&lt;/script&gt;
+    &lt;script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"&gt;&lt;/script&gt;
+    &lt;script src="xmlayout.min.js"&gt;&lt;/script&gt;
+</code>
+</pre>
+<pre class="line-numbers language-markup">
+<code>
+    &lt;div id="main" style="width: 2000px; height: 1000px;"&gt;&lt;/div&gt;
+</code>
+</pre>
+<pre class="line-numbers">
+<code class="language-javascript">
+    $(document).ready(function(){
+        var xm = $.xmlayout.layout();
+
+        var data = xm.design(
+          3,//rows
+          2,//cols
+          1,//按照列划分
+          [//矩阵cols × (rows + 1) = 2 × 4
+            [1,1,1,1],
+            [2,1,2,2]
+          ],
+          [//矩阵，取消第1行第1列子容器的右键菜单和工具条
+            ["1:1", false, false]
+          ]
+        );
+
+        //对data中的第2行第2列的子容器再次划分
+        var data1 = xm.design(2,1,0,null,null,xm.getDesignNode("2:2", data));
+
+        //对data1中的第2行第1列的子容器再次划分
+        xm.design(2,2,1,null,null,xm.getDesignNode("2:1", data1));
+
+        xm.init({
+          data : data,
+          panel : $("#main"),
+          drag_bar_unit : 5,
+          isborder : true,
+          timer : 2000
+        });
+
+        xm.getPanels("2:2;2:1;1:1").css("background-color","red");
+      });
+</code>
+</pre>
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var xm = $.xmlayout.layout();
+
+        var data = xm.design(
+          3,//rows
+          2,//cols
+          1,//按照列划分
+          [//矩阵cols × (rows + 1) = 2 × 4
+            [1,1,1,1],
+            [2,1,2,2]
+          ],
+          [//矩阵，取消第1行第1列子容器的右键菜单和工具条
+            ["1:1", false, false]
+          ]
+        );
+
+        //对data中的第2行第2列的子容器再次划分
+        var data1 = xm.design(2,1,0,null,null,xm.getDesignNode("2:2", data));
+
+        //对data1中的第2行第1列的子容器再次划分
+        xm.design(2,2,0,null,null,xm.getDesignNode("2:1", data1));
+
+        xm.init({
+          data : data,
+          panel : $("#main"),
+          drag_bar_unit : 5,
+          isborder : true,
+          timer : 2000
+        });
+
+        var panels = xm.getPanels();
+        for(var i = 0; i < panels.length; i++)
+          console.log(panels[i].prop("indexp"));
+
+        xm.getPanels("2:2;2:1;1:1").css("background-color","red");
+        //xm.getPanels("2:2;2:1;2:2").loadPage("http://www.baidu.com", "123");
+      });
+    </script>
+    <script src="../../../plugs/prism/prism.js"></script>
+  </body>
+</html>

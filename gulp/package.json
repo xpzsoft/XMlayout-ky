@@ -1,0 +1,14 @@
+{
+  "name": "xmlayout",
+  "version": "1.0.0",
+  "description": "This is for study gulp project !",
+  "main": "gulpfile.js",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.3.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-uglify": "^3.0.0"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,29 @@
+<link href="../../plugs/prism/prism.css" rel="stylesheet">
+<div style="width: 100%; height: 100%; overflow: auto;">
+	<div style="width:2500px; height:2000px; background-color: blue;">
+		<span style="font-size: 40px; color: white;">Panel 2</span>
+		<div style="margin-left: 5%;">
+			<span style="font-size: 20px; color: white;">In panel 2, one features has been set using xmlayout.js as follow : </span>
+		</div>
+		<div style=" width: 90%; margin-left: 5%;">
+			<br/>
+			<span style="color: white;">1, Tools bar is disabled by setting : </span>
+<pre class="line-numbers" data-line="7"><code class="language-javascript">
+	var data = xm.element(10, true, true, null, [
+        xm.element(2, true, true, true),
+        xm.element(8, true, true, null, null, [
+            xm.element(8, true, true, null, [
+                xm.element(8, true, true, null, null, [
+                    xm.element(8, true, true, false),
+                    xm.element(5, true, true, true)
+                    ]),
+                xm.element(2, true, true, false)
+                ]),
+            xm.element(2, false, false, true)
+            ]),
+    ]);
+</code></pre>
+		</div>
+	</div>
+</div>
+<script src="../../plugs/prism/prism.js"></script>

@@ -1,0 +1,43 @@
+<link href="../../plugs/prism/prism.css" rel="stylesheet">
+<div style="width:100%; height:100%; background-color: green; overflow: auto;">
+		<div><span style="font-size: 40px; color: white;">Panel 5</span></div>
+		<div style="margin-left: 5%;">
+			<span style="font-size: 20px; color: white;">In panel 5, one features has been set using xmlayout.js as follow : </span>
+		</div>
+		<div style=" width: 90%; margin-left: 5%;">
+		<br/>
+			<span style="color: white;">1, Right panel and drag is disabled by setting : </span>
+<pre class="line-numbers" data-line="13"><code class="language-javascript">
+	var data = xm.element(10, true, true, null, [
+        xm.element(2, true, true, true),
+        xm.element(8, true, true, null, null, [
+            xm.element(8, true, true, null, [
+                xm.element(8, true, true, null, null, [
+                    xm.element(8, true, true, false),
+                    xm.element(5, true, true, true)
+                    ]),
+                xm.element(2, true, true, false)
+                ]),
+                
+            xm.element(2, false, false, true)
+            ])
+    
+    xm.init({
+        data : data,
+        panel : $(".div_full").eq(0),
+        timer : 2000,
+        drag_bar_unit : 5
+    });
+
+    var panels = xm.getPanels();
+
+    //use loadPage() to load a url that a title will be build by XMlayout.js
+    panels[4].loadPage("demo2/test5.html", "test", {fontcolor:"red"});
+
+    ]);
+</code></pre>
+		</div>
+		<br/>
+		<br/>
+</div>
+<script src="../../plugs/prism/prism.js"></script>

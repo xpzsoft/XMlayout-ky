@@ -1,0 +1,79 @@
+.wh(@width:100%, @height:100%, @float:none){
+	width: @width;
+	height: @height;
+	float: @float;
+}
+
+html,body, .div_full{
+	margin: 0;
+	.wh;
+	overflow-y: hidden;
+}
+
+body{
+	background-color: #3B3B3B;
+}
+
+#div0{
+	.wh(100%, 30px);
+	margin-top:30px; 
+}
+
+#div0>a{
+	color: white;
+	margin-left: 20px;
+}
+
+#div1{
+	width: 100%; 
+	height: -moz-calc(~"100% - 80px"); 
+	height: -webkit-calc(~"100% - 80px"); 
+	height: calc(~"100% - 80px");
+}
+
+#div2{
+	.wh(0.5%, 100%, left);
+}
+
+#div3{
+	.wh(0.5%, 100%, left);
+}
+
+#workspace{
+	.wh(calc(~"99% - 10px"), 100%, left); 
+	background-color: white; 
+	border-radius:5px;
+}
+
+.xmlayout-panel{
+	.wh;
+	border-radius: 4px;
+}
+
+.xmlayout-panel-head{
+	height: 30px; 
+	background-color: #F0F0F0;
+}
+
+.xmlayout-panel-head>label{
+	margin-top: 10px;
+	font-size: 12px;
+}
+
+.xmlayout-panel-body{
+	background-color: white; 
+	width:100%; 
+	height: -moz-calc(~"100% - 30px"); 
+	height: -webkit-calc(~"100% - 30px"); 
+	height: calc(~"100% - 30px");
+}
+
+.xmlayout-panel-body>div{
+	.wh;
+	overflow: auto;
+}
+
+.xmlayout-panel-body>div>div{
+	.wh;
+	min-height: 200px;
+}

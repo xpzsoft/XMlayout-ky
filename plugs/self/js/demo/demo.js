@@ -1,0 +1,1 @@
+$(document).ready(function(){$("#workspace").load("demo1/demo1.html"),$(".demo").click(function(){"demo1"==$(this).attr("name")?$("#workspace").load("demo1/demo1.html"):$("#workspace").load("demo2/demo2.html")})});
