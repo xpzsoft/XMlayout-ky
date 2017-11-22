@@ -11,11 +11,29 @@
     <script src="../../../plugs/jquery-xmlayout/xmlayout.min.js"></script>
   </head>
   <body oncontextmenu="window.event.returnValue = false; return false;">
-    <div style="height: 100px;">
-      <a href="../workspace.html">Return</a>
+
+    <!-- 特性介绍 begin -->
+    <div style="height: 180px;">
+      <a href="../../../">Return</a>
+      <h4>特性</h4>
+      <ul>
+        <li>在同一个docuemnt下，对多个div进行布局设计</li>
+        <li>对同一个div进行覆盖设计</li>
+        <li>本例中，#main、#main1默认设置为支持动画播放，所以动画播放时共有15个页面，当点击"refesh"按钮后，#main重新被设计，且设置为不支持动画播放，所以播放时只有9个页面</li>
+        <li>运用design_i()、getPanels_i()、draw()对子容器进行布局，并在test.html页面中绑定映射的元素</li>
+      </ul>
     </div>
-  	<div id="main" style="width: 2000px; height: 1000px;"></div>
-    <div style="width: 2000px;">
+    <!-- 特性介绍 end -->
+
+    <!-- 被划分的两个div容器 begin -->
+    <input type="button" name="refesh" value="refesh" />
+  	<div id="main" style="width: 2000px; height: 1000px;"></div><br />
+    <div id="main1" style="width: 1800px; height: 1000px;"></div>
+    <!-- 被划分的两个div容器 end -->
+
+
+    <!-- 页面显示代码 beigin -->
+    <div>
     <br/>
       实现代码：
 <pre class="line-numbers language-markup">
@@ -29,6 +47,7 @@
 <pre class="line-numbers language-markup">
 <code>
     &lt;div id="main" style="width: 2000px; height: 1000px;"&gt;&lt;/div&gt;
+    &lt;div id="main1" style="width: 1800px; height: 1000px;"&gt;&lt;/div&gt;
 </code>
 </pre>
 <pre class="line-numbers">
@@ -49,12 +68,6 @@
           ]
         );
 
-        //对data中的第2行第2列的子容器再次划分
-        var data1 = xm.design(2,1,0,null,null,xm.getDesignNode("2:2", data));
-
-        //对data1中的第2行第1列的子容器再次划分
-        xm.design(2,2,1,null,null,xm.getDesignNode("2:1", data1));
-
         xm.init({
           data : data,
           panel : $("#main"),
@@ -63,11 +76,109 @@
           timer : 2000
         });
 
-        xm.getPanels("2:2;2:1;1:1").css("background-color","red");
-      });
+        xm.getPanels('2:2').loadPage("test.html", null, function(){
+          //第一划分为，将xm.getPanels('2:2')设置为1×2
+          xm.getPanels('2:2').design_i(1,2, [[1,1,1]], false, true);
+
+          //第二次划分，将第1行2列的panel设计为3×4，其中第1行的高度为固定值60px，第1行1列宽度为固定值299px，第1行3列的宽度为固定值10px，第1行2列和4列各站剩下宽度的50%（计算方法：1/(1+1)=0.5），第2行和第3行的高度分别占剩下高度的50%（计算方法：1/(1+1)=0.5）
+          xm.getPanels('2:2').getPanels_i('1:2').design_i(3,4, [["60px","299px",1,"10px",1],["100px",2,1,1,1], [1,1,1,1,1]], false, true);
+
+          //第三次划分，将第1行1列的panel设计为2×1，且第1行1列的高度为固定值200px
+          xm.getPanels('2:2').getPanels_i('1:1').design_i(2,1, [["200px",1],[1,1]], false, true);
+
+          //第四次划分，将第三次划分后的第1行1列的panel设计为2×1，且第1行的高度为固定值100px，第二行为自动高度
+          xm.getPanels('2:2').getPanels_i('1:1').getPanels_i('1:1').design_i(2,1, [["100px",1],["auto",1]], false, true);
+          
+          //绘制布局
+          xm.getPanels('2:2').draw();
+        });
+
+        //对#main再次布局设计
+        $('input').click(function(){
+          var xmf = $.xmlayout.layout();
+
+          var data = xmf.design(
+            4,//rows
+            3,//cols
+            1,//按照列划分
+            [//矩阵cols × (rows + 1) = 3 × 5
+              [1,1,1,1,1],
+              [2,1,2,2,1],
+              [1,1,1,1,1]
+            ]
+          );
+
+          xmf.init({
+            data : data,
+            panel : $("#main"),
+            drag_bar_unit : 5,
+            isborder : true,
+            timer : 2000,
+            playuseable : false//#main重新被设计，且设置为不支持动画播放
+          });
+        });
+
+        //同一个页面，可同时设计多个div，本例中设计了#main、#main1两个页面
+        var xm1 = $.xmlayout.layout();
+        var data = xm1.design(
+          3,//rows
+          2,//cols
+          1,//按列划分
+          [//矩阵cols × (rows + 1) = 2 × 4
+            [1,1,1,1],
+            [2,1,2,2]
+          ],
+          [
+            true, //所有子容器均添加右键菜单
+            true  //所有子容器均添加工具条
+          ]);
+
+        var data1 = xm1.design(
+          2,//rows
+          1,//cols
+          0,//按行划分
+          null,
+          null,
+          xm1.getDesignNode("2:2", data)//对data中设计的第2行第2列的容器再进行划分，index为"2:2"
+          );
+
+        var data2 = xm1.design(
+          1,//rows
+          2,//cols
+          1,//按列划分
+          null,
+          null,
+          xm1.getDesignNode("2:1", data1)//对data1中设计的第2行第1列的容器再进行划分，index为"2:1"
+          );
+
+        xm1.init({
+          data : data,
+          panel : $("#main1"),
+          drag_bar_unit : 6,
+          isborder : true,
+          timer : 2000
+        });
+</code>
+</pre>
+<pre class="line-numbers language-markup">
+<code>
+    //test.html
+    &lt;div class="xmlayout-in"&gt;
+      &lt;div style="width: 100%; height: 100%; background-color: red;" xmidx="1:2;1:1"&gt;&lt;input type="text" name="ddd" value="textbox" /&gt;&lt;/div&gt;
+      &lt;div style="width: 100%; height: 100%; background-color: blue;" xmidx="1:2;2:2"&gt;&lt;input type="button" name="xxxx" value="button" /&gt;&lt;/div&gt;
+      &lt;h4 xmidx="1:2;3:1"&gt;XMLayout&lt;/h4&gt;
+    &lt;/div&gt;
+    &lt;div xmidx="1:2;3:2" style="width: 100%; height: 100%; overflow: auto;"&gt;
+        &lt;div style="width: 800px; height: 600px; background-color: width;"&gt;
+            Inner big div!
+        &lt;/div&gt;
+    &lt;/div&gt;
 </code>
 </pre>
     </div>
+    <!-- 页面显示代码 end -->
+
+    <!-- js脚本 begin -->
     <script type="text/javascript">
       $(document).ready(function(){
         var xm = $.xmlayout.layout();
@@ -85,12 +196,6 @@
           ]
         );
 
-        //对data中的第2行第2列的子容器再次划分
-        var data1 = xm.design(2,1,0,null,null,xm.getDesignNode("2:2", data));
-
-        //对data1中的第2行第1列的子容器再次划分
-        xm.design(2,2,0,null,null,xm.getDesignNode("2:1", data1));
-
         xm.init({
           data : data,
           panel : $("#main"),
@@ -99,14 +204,123 @@
           timer : 2000
         });
 
-        var panels = xm.getPanels();
-        for(var i = 0; i < panels.length; i++)
-          console.log(panels[i].prop("indexp"));
+        xm.getPanels('2:2').loadPage("test.html", null, function(){
+          //第一划分为，将xm.getPanels('2:2')设置为1×2
+          xm.getPanels('2:2').design_i(1,2, [[1,1,1]], false, true);
 
-        xm.getPanels("2:2;2:1;1:1").css("background-color","red");
-        //xm.getPanels("2:2;2:1;2:2").loadPage("http://www.baidu.com", "123");
+          //第二次划分，将第1行2列的panel设计为3×4，其中第1行的高度为固定值60px，第1行1列宽度为固定值299px，第1行3列的宽度为固定值10px，第1行2列和4列各站剩下宽度的50%（计算方法：1/(1+1)=0.5），第2行和第3行的高度分别占剩下高度的50%（计算方法：1/(1+1)=0.5）
+          xm.getPanels('2:2').getPanels_i('1:2').design_i(3,4, [["60px","299px",1,"10px",1],["100px",2,1,1,1], [1,1,1,1,1]], false, true);
+
+          //第三次划分，将第1行1列的panel设计为2×1，且第1行1列的高度为固定值200px
+          xm.getPanels('2:2').getPanels_i('1:1').design_i(2,1, [["200px",1],[1,1]], false, true);
+
+          //第四次划分，将第三次划分后的第1行1列的panel设计为2×1，且第1行的高度为固定值100px，第二行为自动高度
+          xm.getPanels('2:2').getPanels_i('1:1').getPanels_i('1:1').design_i(2,1, [["100px",1],["auto",1]], false, true);
+          
+          //绘制布局
+          xm.getPanels('2:2').draw();
+        });
+
+        //对#main再次布局设计
+        $('input').click(function(){
+          var xmf = $.xmlayout.layout();
+
+          var data = xmf.design(
+            4,//rows
+            3,//cols
+            1,//按照列划分
+            [//矩阵cols × (rows + 1) = 3 × 5
+              [1,1,1,1,1],
+              [2,1,2,2,1],
+              [1,1,1,1,1]
+            ]
+          );
+
+          xmf.init({
+            data : data,
+            panel : $("#main"),
+            drag_bar_unit : 5,
+            isborder : true,
+            timer : 2000,
+            playuseable : false//#main重新被设计，且设置为不支持动画播放
+          });
+        });
+
+        //同一个页面，可同时设计多个div，本例中设计了#main、#main1两个页面
+        var xm1 = $.xmlayout.layout();
+        var data = xm1.design(
+          3,//rows
+          2,//cols
+          1,//按列划分
+          [//矩阵cols × (rows + 1) = 2 × 4
+            [1,1,1,1],
+            [2,1,2,2]
+          ],
+          [
+            true, //所有子容器均添加右键菜单
+            true  //所有子容器均添加工具条
+          ]);
+
+        var data1 = xm1.design(
+          2,//rows
+          1,//cols
+          0,//按行划分
+          null,
+          null,
+          xm1.getDesignNode("2:2", data)//对data中设计的第2行第2列的容器再进行划分，index为"2:2"
+          );
+
+        var data2 = xm1.design(
+          1,//rows
+          2,//cols
+          1,//按列划分
+          null,
+          null,
+          xm1.getDesignNode("2:1", data1)//对data1中设计的第2行第1列的容器再进行划分，index为"2:1"
+          );
+
+        xm1.init({
+          data : data,
+          panel : $("#main1"),
+          drag_bar_unit : 6,
+          isborder : true,
+          timer : 2000
+        });
+
+        // var xm1 = $.xmlayout.layout();//创建xmlayout对象
+        
+        // //[二分法]设计div容器布局
+        // var data = xm1.design(
+        //     2,//rows
+        //     2,//cols
+        //     1,//按列划分
+        //     [//矩阵cols × (rows + 1) = 2 × 3
+        //         [1,1,1,],
+        //         [2,1,1,]
+        //     ],
+        //     [
+        //         true, //所有子容器均添加右键菜单
+        //         true  //所有子容器均添加工具条
+        //     ]
+        // );
+
+        // xm1.init({
+        //   data : data,//设计的布局结果
+        //   panel : $("#main1"),//目标容器
+        //   timer : 5000//放映时间
+        // });//初始化布局
+
+        // //获取布局划分完成后的每个子div容器，返回jquery对象
+        // var panels =xm1.getPanels(); 
+        // panels[0].text("panel1");
+        // panels[1].text("panel2");
+        // panels[2].text("panel3");
+        // panels[3].text("panel4");
+
       });
     </script>
     <script src="../../../plugs/prism/prism.js"></script>
+
+    <!-- js脚本 end -->
   </body>
 </html>

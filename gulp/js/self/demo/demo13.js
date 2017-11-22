@@ -2,7 +2,7 @@ $(document).ready(function(){
 		var lmyChart = null;
 
 		function init_lisitener() {
-			$.xmlayout.xm.resize(function () {
+			$.xmlayout.getParam('xm').resize(function () {
 				lmyChart.resize();
 			});
 		};

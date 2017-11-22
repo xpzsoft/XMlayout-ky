@@ -7,7 +7,6 @@
 html,body, .div_full{
 	margin: 0;
 	.wh;
-	overflow-y: hidden;
 }
 
 body{
@@ -47,33 +46,15 @@ body{
 
 .xmlayout-panel{
 	.wh;
-	border-radius: 4px;
-}
-
-.xmlayout-panel-head{
-	height: 30px; 
-	background-color: #F0F0F0;
-}
-
-.xmlayout-panel-head>label{
-	margin-top: 10px;
-	font-size: 12px;
-}
-
-.xmlayout-panel-body{
-	background-color: white; 
-	width:100%; 
-	height: -moz-calc(~"100% - 30px"); 
-	height: -webkit-calc(~"100% - 30px"); 
-	height: calc(~"100% - 30px");
-}
-
-.xmlayout-panel-body>div{
-	.wh;
 	overflow: auto;
 }
 
-.xmlayout-panel-body>div>div{
+.xmlayout-panel>div{
+	.wh(calc(~"100% - 10px"), calc(~"100% - 10px"));
+	padding: 5px 5px 5px 5px;
+}
+
+.xmlayout-panel>div>div{
 	.wh;
 	min-height: 200px;
 }
